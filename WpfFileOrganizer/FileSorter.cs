@@ -17,12 +17,27 @@ namespace WpfFileOrganizer
     {
         private readonly Dictionary<string, string> _fileTypeMappings;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileSorter"/> class.
+        /// </summary>
+        /// <remarks>
+        /// The constructor populates the internal <see cref="_fileTypeMappings"/> dictionary with predefined file
+        /// extension-to-folder mappings by calling the <see cref="BuildFileTypeMappings"/> method.
+        /// </remarks>
         public FileSorter()
         {
             _fileTypeMappings = BuildFileTypeMappings();
         }
 
-        // Builds a dictionary mapping file extensions to their respective folder names.
+        /// <summary>
+        /// Builds a dictionary that maps file extensions to their respective folder names.
+        /// </summary>
+        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> where the key is a file extension (e.g., ".jpg") and the
+        /// value is the corresponding folder name (e.g., "Images").</returns>
+        /// <remarks>
+        /// The method defines a set of categories (e.g., Images, Videos) and their associated file extensions. It then
+        /// populates the dictionary with these mappings using case-insensitive comparison.
+        /// </remarks>
         private static Dictionary<string, string> BuildFileTypeMappings()
         {
             var mappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -46,7 +61,23 @@ namespace WpfFileOrganizer
             return mappings;
         }
 
-        // Sorts files from the source directory into specified directories based on their file types.
+        /// <summary>
+        /// Sorts files from the source directory into specified destination directories based on their file types.
+        /// </summary>
+        /// <param name="source">The source directory path from which files will be sorted.</param>
+        /// <param name="images">The destination directory path for image files.</param>
+        /// <param name="videos">The destination directory path for video files.</param>
+        /// <param name="texts">The destination directory path for text files.</param>
+        /// <param name="tables">The destination directory path for table/spreadsheet files.</param>
+        /// <param name="pdfs">The destination directory path for PDF files.</param>
+        /// <param name="others">The destination directory path for files that do not match any predefined category.</param>
+        /// <exception cref="DirectoryNotFoundException">Thrown when the source directory does not exist.</exception>
+        /// <remarks>
+        /// This method recursively scans the source directory and its subdirectories for files. It categorizes each file
+        /// based on its extension using the <see cref="_fileTypeMappings"/> dictionary. If a file with the same name
+        /// already exists at the destination, a dialog prompts the user to rename or skip the file. Files already located
+        /// in destination directories are skipped to prevent infinite recursion.
+        /// </remarks>
         public void Sort(string source, string images, string videos, string texts, string tables, string pdfs, string others)
         {
             if (!Directory.Exists(source))
@@ -135,7 +166,16 @@ namespace WpfFileOrganizer
                 }
             }
         }
+        /// <summary>
         /// Generates a unique file name if a file with the same name already exists in the destination directory.
+        /// </summary>
+        /// <param name="directory">The destination directory path where the file will be moved.</param>
+        /// <param name="fileName">The original name of the file (including extension).</param>
+        /// <returns>A unique file path that does not conflict with existing files in the directory.</returns>
+        /// <remarks>
+        /// If a file with the same name exists, the method appends a numeric suffix (e.g., "_1", "_2") to the file name
+        /// until a unique name is found. The original extension is preserved.
+        /// </remarks>
         private static string GetSafeDestinationPath(string directory, string fileName)
         {
             string name = Path.GetFileNameWithoutExtension(fileName);
