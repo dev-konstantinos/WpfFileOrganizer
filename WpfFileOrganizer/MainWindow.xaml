@@ -1,0 +1,67 @@
+﻿<Window x:Class="WpfFileOrganizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="File Organizer" Height="400" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Source Folder -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="Source Folder:" Width="120" FontWeight="Bold"/>
+            <TextBox x:Name="SourceFolderTextBox" Width="520" Margin="0,0,10,0"/>
+            <Button x:Name="SelectSourceButton" Content="Select" Width="80" Click="SelectSourceButton_Click"/>
+        </StackPanel>
+
+        <!-- Destination Folders -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="Images Folder:" Width="120"/>
+            <TextBox x:Name="ImagesFolderTextBox" Width="520" Margin="0,0,10,0"/>
+            <Button x:Name="SelectImagesButton" Content="Select" Width="80" Click="SelectImagesButton_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="Videos Folder:" Width="120"/>
+            <TextBox x:Name="VideosFolderTextBox" Width="520" Margin="0,0,10,0"/>
+            <Button x:Name="SelectVideosButton" Content="Select" Width="80" Click="SelectVideosButton_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="Texts Folder:" Width="120"/>
+            <TextBox x:Name="TextsFolderTextBox" Width="520" Margin="0,0,10,0"/>
+            <Button x:Name="SelectTextsButton" Content="Select" Width="80" Click="SelectTextsButton_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="Tables Folder:" Width="120"/>
+            <TextBox x:Name="TablesFolderTextBox" Width="520" Margin="0,0,10,0"/>
+            <Button x:Name="SelectTablesButton" Content="Select" Width="80" Click="SelectTablesButton_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="PDFs Folder:" Width="120"/>
+            <TextBox x:Name="PdfsFolderTextBox" Width="520" Margin="0,0,10,0"/>
+            <Button x:Name="SelectPdfsButton" Content="Select" Width="80" Click="SelectPdfsButton_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Row="6" Orientation="Horizontal" Margin="0,0,0,20">
+            <Label Content="Others Folder:" Width="120"/>
+            <TextBox x:Name="OthersFolderTextBox" Width="520" Margin="0,0,10,0"/>
+            <Button x:Name="SelectOthersButton" Content="Select" Width="80" Click="SelectOthersButton_Click"/>
+        </StackPanel>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <Button x:Name="StartButton" Content="Start" Width="100" Margin="0,0,10,0" Click="StartButton_Click"/>
+            <Button x:Name="ClearButton" Content="Clear" Width="100" Margin="0,0,10,0" Click="ClearButton_Click"/>
+            <Button x:Name="ExitButton" Content="Exit" Width="100" Click="ExitButton_Click"/>
+        </StackPanel>
+
+        <!-- Status Label -->
+        <Label x:Name="StatusLabel" Grid.Row="8" Content="Ready" HorizontalAlignment="Center" Foreground="Black"/>
+    </Grid>
+</Window>
