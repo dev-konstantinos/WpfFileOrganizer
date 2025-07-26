@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
-using WpfFileOrganizer.BusinessLogic;
+using WpfFileOrganizer;
 
 namespace WpfFileOrganizer
 {
