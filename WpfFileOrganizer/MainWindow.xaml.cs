@@ -9,8 +9,7 @@ namespace WpfFileOrganizer
     public partial class MainWindow : Window
     {
         private readonly FileSorter _fileSorter;
-
-        private AppSettings _appSettings;
+        private readonly AppSettings _appSettings;
 
         public MainWindow()
         {
@@ -139,11 +138,10 @@ namespace WpfFileOrganizer
 
         private void SortFilesWithProgress(string source, string images, string videos, string texts, string tables, string pdfs, string others)
         {
-
             try
             {
                 _fileSorter.Sort(source, images, videos, texts, tables, pdfs, others);
-                string[] files = Directory.GetFiles(source, "*.*", SearchOption.TopDirectoryOnly);
+                string[] files = Directory.GetFiles(source, "*.*", SearchOption.AllDirectories);
                 int totalFiles = files.Length;
 
                 StatusLabel.Content = "Success: Files sorted successfully.";

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Windows;
 
 namespace WpfFileOrganizer
 {
@@ -52,16 +52,16 @@ namespace WpfFileOrganizer
             if (!Directory.Exists(source))
                 throw new DirectoryNotFoundException($"Source directory '{source}' does not exist.");
 
-            string[] directories = { images, videos, texts, tables, pdfs, others };
-            foreach (var dir in directories)
+            string[] destinations = { images, videos, texts, tables, pdfs, others };
+            foreach (var dir in destinations)
             {
                 Directory.CreateDirectory(dir);
             }
 
-            string[] files = Directory.GetFiles(source, "*.*", SearchOption.TopDirectoryOnly);
+            string[] files = Directory.GetFiles(source, "*.*", SearchOption.AllDirectories);
             if (files.Length == 0)
             {
-                Console.WriteLine("Warning: No files found in source directory.");
+                Console.WriteLine("Warning: No files found in source directory and subdirectories.");
                 return;
             }
 
@@ -83,10 +83,50 @@ namespace WpfFileOrganizer
                         _ => others
                     };
                 }
+                string destinationPath = Path.Combine(destinationFolder, fileName);
 
+                // Check if the file is already in one of the destination folders
+                string sourceFullPath = Path.GetFullPath(file);
+                bool isInDestination = false;
+                foreach (var dest in destinations)
+                {
+                    string destFullPath = Path.GetFullPath(dest);
+                    if (sourceFullPath.StartsWith(destFullPath, StringComparison.OrdinalIgnoreCase))
+                    {
+                        isInDestination = true;
+                        break;
+                    }
+                }
+                if (isInDestination)
+                {
+                    continue;
+                }
+                // Check if the destination file already exists
+                if (File.Exists(destinationPath))
+                {
+                    var result = MessageBox.Show(
+                        $"The file '{fileName}' already exists at '{destinationPath}'.\n\n" +
+                        "What would you like to do?\n" +
+                        "- Yes: Rename\n" +
+                        "- No: Skip",
+                        "File Conflict",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        destinationPath = GetSafeDestinationPath(destinationFolder, fileName);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Skipped {fileName} due to conflict.");
+                        continue;
+                    }
+                }
+                // Attempt to move the file to the destination folder
                 try
                 {
-                    File.Move(file, Path.Combine(destinationFolder, fileName));
+                    File.Move(file, destinationPath);
                     Console.WriteLine($"Moved {fileName} to {Path.GetFileName(destinationFolder)}");
                 }
                 catch (Exception ex)
@@ -94,6 +134,23 @@ namespace WpfFileOrganizer
                     Console.WriteLine($"Error moving {fileName}: {ex.Message}");
                 }
             }
+        }
+        /// Generates a unique file name if a file with the same name already exists in the destination directory.
+        private static string GetSafeDestinationPath(string directory, string fileName)
+        {
+            string name = Path.GetFileNameWithoutExtension(fileName);
+            string ext = Path.GetExtension(fileName);
+            string destination = Path.Combine(directory, fileName);
+            int counter = 1;
+
+            while (File.Exists(destination))
+            {
+                string newName = $"{name}_{counter}{ext}";
+                destination = Path.Combine(directory, newName);
+                counter++;
+            }
+
+            return destination;
         }
     }
 }
